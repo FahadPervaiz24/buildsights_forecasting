@@ -1,53 +1,31 @@
 # Buildsights Forecasting v1
 
-Forecasting workspace for NYC DOB permits. Data is pulled from NYC Open Data, normalized into a unified schema, and modeled as monthly district-level time series.
+This project is an ML-focused spatiotemporal permit modeling workspace for NYC: it builds a unified training dataset from multi-source DOB records, learns temporal baselines for count forecasting, and derives unsupervised spatial regimes using density-based clustering.
 
-## Data Sources
-- **DOB Permit Issuance** (`ipu4-2q9a`) — historical permits
-- **DOB NOW: Build – Approved Permits** (`rbx6-tga4`) — permits issued through DOB NOW (post‑2016)
+## Project Goal
+- Build robust monthly permit-count forecasting baselines with reproducible evaluation.
+- Learn spatial structure in permit activity via unsupervised clustering on raw point data.
+- Support feature engineering and regime-aware modeling with interpretable cluster assignments.
 
-## Pipeline (Quickstart)
-1. **Ingest raw datasets (API → parquet)**
-```bash
-cd Buildsights_Forecasting_v1
-python3 scripts/data_processing/ingest_permits_api_to_parquet.py --dataset-id ipu4-2q9a
-python3 scripts/data_processing/ingest_dob_now_api_to_parquet.py
-```
+## What The Project Does
+- Ingests historical and modern DOB permit streams and normalizes them into a single canonical feature space.
+- Produces modeling-ready panel/time-series datasets at district and cluster granularities.
+- Benchmarks univariate forecasting baselines (rolling mean, SARIMA-style comparisons) using held-out error metrics.
+- Runs adaptive borough-aware HDBSCAN to detect spatial permit regimes under heterogeneous urban densities.
+- Post-processes clusters into visual-cap representations and full final assignments for downstream ML workflows.
+- Generates analytical visuals/animations for density diagnostics, cluster validation, and model communication.
 
-2. **Build unified schema**
-```bash
-python3 scripts/data_processing/build_unified_permits.py
-```
+## Data Scope
+- **DOB Permit Issuance** (`ipu4-2q9a`): historical permit issuance records.
+- **DOB NOW: Build – Approved Permits** (`rbx6-tga4`): modern DOB NOW permit approvals.
+- **NYC Community District geometry**: spatial context used for district attribution and borough-aware clustering calibration.
 
-3. **Attach community districts (BoroCD) via spatial join**
-```bash
-python3 scripts/data_processing/spatial_border_ingest.py
-```
+## Repository Structure
+- `data/`: raw sources plus feature-engineered/derived artifacts used by forecasting and clustering models.
+- `scripts/`: data engineering, model baselines, unsupervised clustering, and visualization/diagnostic code.
+- `report.md`: experiment notes, metric snapshots, and interpretation findings.
+- `PRD.md`: milestone checklist for data, modeling, evaluation, and handoff readiness.
 
-4. **Aggregate monthly counts by district**
-```bash
-python3 scripts/data_processing/build_monthly_permits_by_district.py
-```
-
-5. **Run baselines**
-```bash
-python3 scripts/monthly_mean_baseline.py
-python3 scripts/monthly_model_compare.py
-```
-
-6. **Plot monthly volume**
-```bash
-python3 scripts/visualization/plot_permits_overview.py
-```
-
-## Key Outputs
-- `data/raw/dob_historical.parquet`
-- `data/raw/dob_now.parquet`
-- `data/processed/permits_unified.parquet`
-- `data/processed/permits_unified_with_district.parquet`
-- `data/processed/monthly_permits_by_district.parquet`
-- `data/processed/monthly_permits_by_district_modeling.parquet`
-
-## Notes
-- Mixed date formats are normalized in scripts; use `issued_date` for modeling.
-- Geo fields are used only for spatial joins; raw data stays in `data/raw/`.
+## Documentation Map
+- `data/README.md`: one-line description of files in the data directory.
+- `scripts/README.md`: one-line description of scripts and visualization outputs.
