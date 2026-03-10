@@ -1,31 +1,54 @@
-# Buildsights Forecasting v1
+# BuildSights Forecasting v1
 
-This project is an ML-focused spatiotemporal permit modeling workspace for NYC: it builds a unified training dataset from multi-source DOB records, learns temporal baselines for count forecasting, and derives unsupervised spatial regimes using density-based clustering.
+BuildSights is a spatiotemporal modeling project focused on understanding and forecasting construction activity in New York City using Department of Buildings (DOB) permit records.
 
-## Project Goal
-- Build robust monthly permit-count forecasting baselines with reproducible evaluation.
-- Learn spatial structure in permit activity via unsupervised clustering on raw point data.
-- Support feature engineering and regime-aware modeling with interpretable cluster assignments.
+The project builds a unified dataset from multiple DOB data sources, analyzes spatial patterns in permit activity, and develops forecasting baselines to predict monthly permit counts across the city.
+
+The system combines **data engineering, spatial analysis, unsupervised clustering, and time-series forecasting** to better understand how construction activity evolves over time and across neighborhoods.
+
+---
+
+## Project Goals
+
+- Build reliable monthly permit-count forecasting baselines with reproducible evaluation.
+- Discover spatial structure in construction activity using unsupervised clustering.
+- Support future modeling by creating interpretable spatial regimes for feature engineering and forecasting.
+
+---
 
 ## What The Project Does
-- Ingests historical and modern DOB permit streams and normalizes them into a single canonical feature space.
-- Produces modeling-ready panel/time-series datasets at district and cluster granularities.
-- Benchmarks univariate forecasting baselines (rolling mean, SARIMA-style comparisons) using held-out error metrics.
-- Runs adaptive borough-aware HDBSCAN to detect spatial permit regimes under heterogeneous urban densities.
-- Post-processes clusters into visual-cap representations and full final assignments for downstream ML workflows.
-- Generates analytical visuals/animations for density diagnostics, cluster validation, and model communication.
 
-## Data Scope
-- **DOB Permit Issuance** (`ipu4-2q9a`): historical permit issuance records.
-- **DOB NOW: Build – Approved Permits** (`rbx6-tga4`): modern DOB NOW permit approvals.
-- **NYC Community District geometry**: spatial context used for district attribution and borough-aware clustering calibration.
+- Ingests historical and modern NYC DOB permit datasets from NYC Open Data APIs.
+- Normalizes records from multiple permit systems into a single canonical dataset.
+- Builds modeling-ready time-series datasets at both **community district** and **cluster-based spatial regimes**.
+- Benchmarks baseline forecasting approaches (rolling mean and SARIMA-style comparisons).
+- Uses **HDBSCAN clustering** on raw permit locations to identify organically emerging development zones.
+- Post-processes clusters for stability and visualization.
+- Generates visual diagnostics and animations to analyze permit density and clustering behavior.
+
+---
+
+## Data Sources
+
+- **DOB Permit Issuance** (`ipu4-2q9a`)  
+  Historical permit issuance records from NYC Open Data.
+
+- **DOB NOW: Build – Approved Permits** (`rbx6-tga4`)  
+  Modern DOB NOW system permit approvals.
+
+- **NYC Community District Geometry**  
+  Spatial boundary dataset used for district-level attribution and spatial analysis.
+
+---
 
 ## Repository Structure
-- `data/`: raw sources plus feature-engineered/derived artifacts used by forecasting and clustering models.
-- `scripts/`: data engineering, model baselines, unsupervised clustering, and visualization/diagnostic code.
-- `report.md`: experiment notes, metric snapshots, and interpretation findings.
-- `PRD.md`: milestone checklist for data, modeling, evaluation, and handoff readiness.
+
+## Repository Structure
+- `data/`: Raw and processed datasets used throughout the pipeline.
+- `scripts/`: dData engineering, clustering, modeling, and visualization scripts.
+- `report.md`: Experiment notes, modeling results, and interpretation findings.
+- `PRD.md`: Project roadmap and milestone checklist tracking completed and remaining work.
 
 ## Documentation Map
-- `data/README.md`: one-line description of files in the data directory.
-- `scripts/README.md`: one-line description of scripts and visualization outputs.
+- `data/README.md`: description of datasets and generated artifacts
+- `scripts/README.md`: description of processing, modeling, and visualization scripts
