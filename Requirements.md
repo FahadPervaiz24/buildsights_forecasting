@@ -25,8 +25,8 @@
 - [x] Export permit-level cluster assignments (`cluster_id_raw`, `cluster_id_visual`, `cluster_id_final`)
 - [x] Add visual cluster cap to avoid over-fragmented map output
 - [x] Reassign noise points to the nearest visual cluster
-- [ ] Build cluster diagnostics summary (cluster sizes, coverage, assignment distances)
-- [ ] Save clustering configuration (parameters + run metadata) for reproducibility
+- [x] Build cluster diagnostics summary (cluster sizes, coverage, assignment distances)
+- [x] Save clustering configuration (parameters + run metadata) for reproducibility
 
 ## Phase 4 — Cluster-Level Forecasting Dataset
 - [ ] Build monthly permit counts grouped by `cluster_id_final`

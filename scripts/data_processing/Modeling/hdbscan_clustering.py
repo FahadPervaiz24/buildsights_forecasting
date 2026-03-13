@@ -22,6 +22,8 @@ TARGET_VISUAL_CLUSTERS = 150
 OUTPUT_DENSITY = "scripts/visualization/output/raw_permits_density_hexbin.png"
 OUTPUT_CLUSTERS = "scripts/visualization/output/hdbscan_clusters_raw_permits_visual_cap.png"
 OUTPUT_ASSIGNMENTS = "data/processed/permit_cluster_assignments.parquet"
+OUTPUT_ASSIGNMENTS_GEOJSON = "data/processed/permit_cluster_assignments.geojson"
+OUTPUT_CLUSTER_CENTROIDS_GEOJSON = "data/processed/cluster_centroids.geojson"
 
 
 permits = pd.read_parquet(INPUT)
@@ -240,7 +242,7 @@ plt.tight_layout()
 plt.savefig(OUTPUT_CLUSTERS, dpi=300, bbox_inches="tight")
 plt.close(fig)
 
-# Export assignments (no noise reassignment)
+# Export assignments with raw, visual-cap, and final (noise-reassigned) cluster labels
 assign_cols = [
     "permit_id",
     "issued_date",
@@ -254,6 +256,32 @@ assign_cols = [
 ]
 gdf[assign_cols].to_parquet(OUTPUT_ASSIGNMENTS, index=False)
 
+# GeoJSON exports for deck.gl + future nearest-cluster assignment workflows.
+export_cols = assign_cols + ["geometry"]
+gdf_4326 = gdf.to_crs("EPSG:4326")
+gdf_4326[export_cols].to_file(OUTPUT_ASSIGNMENTS_GEOJSON, driver="GeoJSON")
+
+centers = (
+    gdf[gdf["cluster_id_final"] != -1]
+    .groupby("cluster_id_final")
+    .agg(
+        cx=("geometry", lambda s: s.x.mean()),
+        cy=("geometry", lambda s: s.y.mean()),
+        permits=("cluster_id_final", "size"),
+        mean_cluster_prob=("cluster_prob", "mean"),
+    )
+    .reset_index()
+)
+centers_gdf = gpd.GeoDataFrame(
+    centers,
+    geometry=gpd.points_from_xy(centers["cx"], centers["cy"]),
+    crs=gdf.crs,
+).to_crs("EPSG:4326")
+centers_gdf = centers_gdf.drop(columns=["cx", "cy"])
+centers_gdf.to_file(OUTPUT_CLUSTER_CENTROIDS_GEOJSON, driver="GeoJSON")
+
 print("saved density:", OUTPUT_DENSITY)
 print("saved clusters:", OUTPUT_CLUSTERS)
 print("saved assignments:", OUTPUT_ASSIGNMENTS)
+print("saved assignments geojson:", OUTPUT_ASSIGNMENTS_GEOJSON)
+print("saved cluster centroids geojson:", OUTPUT_CLUSTER_CENTROIDS_GEOJSON)
