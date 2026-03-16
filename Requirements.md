@@ -18,7 +18,7 @@
 - [x] Save district-attributed permit dataset for modeling
 - [x] Build monthly permit counts by district
 - [x] Run baseline forecasting benchmarks (MA12 rolling baseline + SARIMA comparison)
-- [ ] Finalize district baseline evaluation setup (rolling-origin vs fixed holdout)
+- [x] Finalize district baseline evaluation setup (rolling-origin vs fixed holdout)
 
 ## Phase 3 — Raw-Point Clustering and Cluster Assignment
 - [x] Run borough-aware HDBSCAN clustering on raw permit point data
