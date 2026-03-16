@@ -29,7 +29,7 @@
 - [x] Save clustering configuration (parameters + run metadata) for reproducibility
 
 ## Phase 4 — Cluster-Level Forecasting Dataset
-- [ ] Build monthly permit counts grouped by `cluster_id_final`
+- [x] Build monthly permit counts grouped by `cluster_id_final`
 - [ ] Add temporal modeling features (lags, rolling averages, seasonal flags)
 - [ ] Save modeling dataset `monthly_permits_by_cluster_modeling.parquet`
 
